@@ -32,7 +32,7 @@ class Usuario:
         self.nickname = nickname
         self.senha = senha
 
-usuario1 = Usuario("Bruno Divino", "BD", "alohomora")
+usuario1 = Usuario("emerson", "BD", "alohomora")
 usuario2 = Usuario("Camila Ferreira", "Mila", "paozinho")
 usuario3 = Usuario("Guilherme Louro", "Cake", "Python_eh_vida")
 
@@ -74,12 +74,14 @@ def login():
 
 @app.route('/autenticar', methods=['POST',])
 def autenticar():
-    if 'alohomora' == request.form['senha']:
-        # grava em um dicionario o nome do usuário
-        session['usuario_logado'] = request.form['usuario'] 
-        flash('logado com sucesso')
-        proxima_pagina = request.form['proxima']
-        return redirect(proxima_pagina)
+    if request.form['usuario'] in usuarios:
+        print(request.form['usuario'])
+        usuario = usuarios[request.form['usuario']]
+        if request.form['senha'] == usuario.senha:
+            session['usuario_logado'] = usuario.nickname
+            flash(usuario.nickname + ' logado com sucesso!')
+            proxima_pagina = request.form['proxima']
+            return redirect(proxima_pagina)
     else:
         flash('Usuário não logado')
         return redirect(url_for('login'))
